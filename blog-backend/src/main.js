@@ -5,7 +5,6 @@ import bodyParser from 'koa-bodyparser';
 import mongoose from 'mongoose';
 import api from './api';
 import jwtMiddleware from './lib/jwtMiddleware';
-import createFakeData from './createFakeData';
 
 const { PORT,  MONGO_URL } = process.env;
 
@@ -15,7 +14,6 @@ mongoose
     { useNewUrlParser: true, useFindAndModify: false, useUnifiedTopology: true  })
   .then(() => {
     console.log('Connected to MongoDB');
-    // createFakeData();
   })
   .catch(e => {
     console.error(e);
