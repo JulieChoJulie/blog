@@ -64,6 +64,10 @@ export const write = async ctx => {
     ctx.throw(500, e);
   }
 };
+
+/*
+GET /api/posts?username=&tag=&page=
+ */
 export const list = async ctx => {
   try {
     const page = parseInt(ctx.query.page || '1', 10);
@@ -73,14 +77,21 @@ export const list = async ctx => {
       return;
     }
 
+    const { tag, username } = ctx.query;
+    // if tag or usernmae is valid, store in the obj, 'query'
+    const query = {
+      ...(username ? {'user.username': username} : {}),
+      ...(tag ? {'tags': tag} : {})
+    };
+
     // get last ten posts
-    const posts = await Post.find()
+    const posts = await Post.find(query)
       .sort({ _id: -1 })
       .limit(10)
       .skip((page - 1) * 10)
       .lean()
       .exec();
-    const postCount = await Post.countDocuments().exec();
+    const postCount = await Post.countDocuments(query).exec();
     ctx.set('Last-Page', Math.ceil(postCount / 10)); // custom header
     ctx.body = posts
       .map(post => ({
