@@ -4,6 +4,7 @@ import Router from 'koa-router';
 import bodyParser from 'koa-bodyparser';
 import mongoose from 'mongoose';
 import api from './api';
+import jwtMiddleware from './lib/jwtMiddleware';
 import createFakeData from './createFakeData';
 
 const { PORT,  MONGO_URL } = process.env;
@@ -14,7 +15,7 @@ mongoose
     { useNewUrlParser: true, useFindAndModify: false, useUnifiedTopology: true  })
   .then(() => {
     console.log('Connected to MongoDB');
-    createFakeData();
+    // createFakeData();
   })
   .catch(e => {
     console.error(e);
@@ -27,8 +28,9 @@ const router = new Router();
 // put JSON type of data in request body and parse it for a server to use
 app.use(bodyParser());
 
-router.use('/api', api.routes()); // apply api route
+app.use(jwtMiddleware);
 
+router.use('/api', api.routes()); // apply api route
 // apply router in app instance
 app.use(router.routes()).use(router.allowedMethods());
 
