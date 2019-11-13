@@ -43,19 +43,39 @@ const Footer = styled.div`
 }
 `;
 
-const AuthForm = () => {
+const textMap = {
+    login: 'Log In',
+    register: 'Sign up'
+};
+
+const AuthForm = ({ type }) => {
+    const text = textMap[type];
     return (
         <AuthFormBlock>
-            <h3>Log In</h3>
+            <h3>{text}</h3>
             <form>
                 <StyledInput autoComplete="username" name="username" placeholder="Id" />
                 <StyledInput
-                    autoComplete="password" name="password" type="pasword" placeholder="Password"
+                    autoComplete="new-password" name="password" type="password" placeholder="Password"
                 />
-                <Button cyan fullWidth style={{ marginTop: '1rem' }}>Log In</Button>
+                {type === 'register' && (
+                    <StyledInput
+                        autoComplete="new-password"
+                        name="passwordConfirm"
+                        placeholder="Password Confirm"
+                        type="password"
+                    />
+                )}
+                <Button cyan fullWidth style={{ marginTop: '1rem' }}>
+                    {text}
+                </Button>
             </form>
             <Footer>
-                <Link to="/register">Sign Up</Link>
+                {type === 'login' ? (
+                    <Link to="/register">Sign Up</Link>
+                ) : (
+                    <Link to="/login">Log In</Link>
+                )}
             </Footer>
         </AuthFormBlock>
     )
