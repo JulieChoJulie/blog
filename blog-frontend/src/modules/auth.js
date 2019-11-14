@@ -29,7 +29,7 @@ const initialState = {
 
 const auth = handleActions(
     {
-        [CHANGED_FIELD]: (state, { payload: { form, key, value }}) =>
+        [CHANGED_FIELD]: (state, { payload: { form, key, value } }) =>
             produce(state, draft => {
                 draft[form][key] = value; // ex. state.register.username = new value
 
@@ -37,8 +37,7 @@ const auth = handleActions(
         [INITIALIZE_FORM]: (state, { payload: form }) => ({
             ...state,
             [form] : initialState[form],
-        }),
-        initialState,
+        })
     },
     initialState,
 );
