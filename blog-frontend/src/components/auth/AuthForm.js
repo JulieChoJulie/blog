@@ -48,15 +48,26 @@ const textMap = {
     register: 'Sign up'
 };
 
-const AuthForm = ({ type }) => {
+const AuthForm = ({ type, form, onChange, onSubmit }) => {
     const text = textMap[type];
     return (
         <AuthFormBlock>
             <h3>{text}</h3>
-            <form>
-                <StyledInput autoComplete="username" name="username" placeholder="Id" />
+            <form onSubmit={onSubmit}>
                 <StyledInput
-                    autoComplete="new-password" name="password" type="password" placeholder="Password"
+                    autoComplete="username"
+                    name="username"
+                    placeholder="Id"
+                    onChange={onChange}
+                    value={form.username}
+                />
+                <StyledInput
+                    autoComplete="new-password"
+                    name="password"
+                    type="password"
+                    placeholder="Password"
+                    onChange={onChange}
+                    value={form.password}
                 />
                 {type === 'register' && (
                     <StyledInput
@@ -64,6 +75,8 @@ const AuthForm = ({ type }) => {
                         name="passwordConfirm"
                         placeholder="Password Confirm"
                         type="password"
+                        onChange={onChange}
+                        value={form.passwordconfirm}
                     />
                 )}
                 <Button cyan fullWidth style={{ marginTop: '1rem' }}>
