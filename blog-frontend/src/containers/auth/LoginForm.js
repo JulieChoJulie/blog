@@ -1,12 +1,17 @@
 import React, { useEffect } from 'react';
+import { withRouter } from 'react-router-dom';
 import { useDispatch , useSelector } from 'react-redux';
-import { changeField, initializeForm } from "../../modules/auth";
+import { changeField, initializeForm, login } from "../../modules/auth";
 import AuthForm from '../../components/auth/AuthForm';
+import { check } from '../../modules/user';
 
-const LoginForm = () => {
+const LoginForm = ({ history }) => {
     const dispatch = useDispatch();
-    const { form } = useSelector(({ auth }) => ({
-        form: auth.login
+    const { form, auth, authError, user } = useSelector(({ auth, user }) => ({
+        form: auth.login,
+        auth: auth.auth,
+        authError: auth.authError,
+        user: user.user
     }));
     // input change event handler
     const onChange = e => {
@@ -23,12 +28,32 @@ const LoginForm = () => {
     // form submit event handler
     const onSubmit = e => {
         e.preventDefault();
+        const { username, password } = form;
+        dispatch(login({ username, password }));
     };
 
     // initialize a form when it's first rendered.
     useEffect(() => {
         dispatch(initializeForm('login'));
     }, [dispatch]);
+
+    useEffect(() => {
+        if(authError) {
+            console.log('Authorization error has been occured.');
+            console.log(authError);
+            return;
+        }
+        if(auth) {
+            console.log('You have successfully logged in.');
+            dispatch(check());
+        }
+    }, [auth, authError, dispatch]);
+
+    useEffect(() => {
+        if (user) {
+            history.push('/');
+        }
+    }, [user, history]);
 
     return(
         <AuthForm
@@ -40,4 +65,4 @@ const LoginForm = () => {
     );
 };
 
-export default LoginForm;
+export default withRouter(LoginForm);

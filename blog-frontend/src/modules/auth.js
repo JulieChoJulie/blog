@@ -50,7 +50,7 @@ export function* authSaga(){
 const initialState = {
     register: {
         username: '',
-        passowrd: '',
+        password: '',
         passwordConfirm: '',
     },
     login: {
