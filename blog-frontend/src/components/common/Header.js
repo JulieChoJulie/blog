@@ -35,7 +35,13 @@ spacer makes page content locate 4rem lower */
 const Spacer = styled.div`
     height: 4rem;
 `;
-const Header = () => {
+
+const UserInfo = styled.div`
+    font-weight: 800;
+    margin-right: 1rem;
+`;
+
+const Header = ({ user }) => {
     return (
         <>
             <HeaderBlock>
@@ -43,9 +49,16 @@ const Header = () => {
                     <Link to="/" className="logo">
                         BLOG
                     </Link>
-                    <div className="right">
-                        <Button to="/login">Log In</Button>
-                    </div>
+                    { user ? (
+                        <div className="right">
+                            <UserInfo>{user.username}</UserInfo>
+                            <Button>Log Out</Button>
+                        </div>
+                    ) : (
+                        <div className="right">
+                            <Button to="/login">Log In</Button>
+                        </div>
+                    )}
                 </Wrapper>
             </HeaderBlock>
             <Spacer />

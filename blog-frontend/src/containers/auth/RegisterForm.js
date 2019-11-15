@@ -74,6 +74,11 @@ const RegisterForm = ({ history }) => {
     useEffect(() => {
         if(user) {
             history.push('/'); // go to homepage
+            try {
+                localStorage.setItem('user', JSON.stringify(user));
+            } catch (e) {
+                console.log('localStorage is not working.');
+            }
         }
     }, [user, history]);
 
