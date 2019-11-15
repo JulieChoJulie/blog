@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch , useSelector } from 'react-redux';
 import { changeField, initializeForm, register } from "../../modules/auth";
 import AuthForm from '../../components/auth/AuthForm';
@@ -6,6 +6,7 @@ import { check } from '../../modules/user';
 import { withRouter } from 'react-router-dom';
 
 const RegisterForm = ({ history }) => {
+    const [error, setError] = useState(null);
     const dispatch = useDispatch();
     const { form, auth, authError, user } = useSelector(({ auth, user }) => ({
         form: auth.register,
@@ -29,8 +30,17 @@ const RegisterForm = ({ history }) => {
     const onSubmit = e => {
         e.preventDefault();
         const { username, password, passwordConfirm } = form;
+        // if at least one of them is empty
+        if([username, password, passwordConfirm].includes('')) {
+            setError('Please fill out all fields.');
+            return;
+        }
+
         if (password !== passwordConfirm ){
             // [TODO] error handler:
+            setError('Your password and confirmation password do not match.');
+            changeField({ form: 'register', key: 'password', value: ''});
+            changeField({ form: 'register', key: 'passwordConfirm', value: ''});
             return;
         }
         dispatch(register({ username, password }));
@@ -45,8 +55,12 @@ const RegisterForm = ({ history }) => {
     // register success and failure handler
     useEffect(() => {
         if (authError) {
-            console.log('Error has been occured.');
-            console.log(authError);
+            // if the account is already existed
+            if (authError.response.status === 409) {
+                setError('Account already exists.');
+            } else {
+                setError('Signing up failed.');
+            }
             return;
         }
         if (auth) {
@@ -69,6 +83,7 @@ const RegisterForm = ({ history }) => {
             form={form}
             onChange={onChange}
             onSubmit={onSubmit}
+            error={error}
         />
     );
 };
