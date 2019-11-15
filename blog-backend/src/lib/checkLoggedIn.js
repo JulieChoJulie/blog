@@ -1,7 +1,5 @@
 const checkedLoggedIn = (ctx, next) => {
-  if (!ctx.state
-
-    .user) {
+  if (!ctx.state.user) {
     ctx.status = 401; // unauthorized;
     return;
   }
