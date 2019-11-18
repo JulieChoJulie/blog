@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import palette from '../../lib/styles/palette';
 import Responsive from '../common/Responsive';
 
-const PostViewerBlock = styled.div`
+const PostViewerBlock = styled(Responsive)`
     margin-top: 4rem;
 `;
 
@@ -21,7 +21,7 @@ const PostHead = styled.div`
 const SubInfo = styled.div`
     margin-top: 1rem;
     color: ${palette.gray[6]};
-    
+
     /* show the word in the center dot between spans */
     span + span:before {
         color: ${palette.gray[5]};
@@ -49,25 +49,38 @@ const PostContent = styled.div`
 `;
 
 
-const PostViewer = () => {
+const PostViewer = ({ post, loading, error }) => {
+    if (error) {
+        if (error.response && error.response.status === 404 ) {
+            return <PostViewerBlock>The post does not exist.</PostViewerBlock>;
+        }
+        return <PostViewerBlock>The error has been occurred.</PostViewerBlock>;
+    }
+
+    if (loading || !post) {
+        return null;
+    }
+
+    const { title, body, user, publishedDate, tags } = post;
+
     return (
         <PostViewerBlock>
             <PostHead>
-                <h1>Title</h1>
+                <h1>{title}</h1>
                 <SubInfo>
                 <span>
-                    <b>Test</b>
+                    <b>{user.username}</b>
                 </span>
-                <span>{new Date().toLocaleDateString()}</span>
+                <span>{new Date(publishedDate).toLocaleDateString()}</span>
                 </SubInfo>
                 <Tags>
-                    <div className="tag">#Tag1</div>
-                    <div className="tag">#Tag2</div>
-                    <div className="tag">#Tag3</div>
+                    {tags.map(tag => (
+                        <div className="tag">#{tag}</div>
+                    ))}
                 </Tags>
             </PostHead>
             <PostContent
-                dangerouslySetInnerHTML={{ __html: '<p>HTML <b>content</b> from post DB</p>' }}
+                dangerouslySetInnerHTML={{ __html: body }}
             />
         </PostViewerBlock>
     );
