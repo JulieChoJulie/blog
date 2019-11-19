@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import Quill from 'quill';
-import 'quill/dist/quill.bubble.css';
+import 'quill/dist/quill.snow.css';
 import styled from 'styled-components';
 import palette from '../../lib/styles/palette';
 import Responsive from '../common/Responsive';
@@ -40,7 +40,7 @@ const Editor = ({ title, body, onChangeField}) => {
 
     useEffect(() => {
         quillInstance.current = new Quill(quillElement.current, {
-            theme: 'bubble',
+            theme: 'snow',
             placeholder: 'Please write here....',
             modules: {
                 toolbar: [

@@ -26,7 +26,7 @@ const PostContent = styled.div`
 `;
 
 
-const PostViewer = ({ post, loading, error }) => {
+const PostViewer = ({ post, loading, error, actionButtons }) => {
     if (error) {
         if (error.response && error.response.status === 404 ) {
             return <PostViewerBlock>The post does not exist.</PostViewerBlock>;
@@ -51,6 +51,7 @@ const PostViewer = ({ post, loading, error }) => {
                 />
                 <Tags tags={tags} />
             </PostHead>
+            {actionButtons}
             <PostContent
                 dangerouslySetInnerHTML={{ __html: body }}
             />
