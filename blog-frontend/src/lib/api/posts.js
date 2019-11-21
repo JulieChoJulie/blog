@@ -17,3 +17,6 @@ export const listPosts = ({ page, username, tag }) => {
     // queryString = username=julie&page=2&tag=hello
     return client.get(`/api/posts?${queryString}`);
 }
+
+export const updatePost = ({ title, body, tags, id }) =>
+    client.patch(`/api/posts/${id}`, { title, body, tags })

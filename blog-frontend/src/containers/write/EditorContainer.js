@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import Editor from '../../components/write/Editor';
 import { useSelector, useDispatch } from "react-redux";
-import { changeField, initialize, unmount } from "../../modules/write";
+import { changeField, initialize } from "../../modules/write";
 
 const EditorContainer = () => {
     const dispatch = useDispatch();
@@ -16,9 +16,9 @@ const EditorContainer = () => {
 
     // initialize when it's unmounted.
     useEffect(() => {
-        dispatch(initialize());
+        // dispatch(initialize());
         return () => {
-            dispatch(unmount());
+            dispatch(initialize());
         };
     }, [dispatch]);
     return <Editor onChangeField={onChangeField} title={title} body={body} />;
